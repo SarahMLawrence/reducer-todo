@@ -1,21 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import TodoForm from '.../components/TodoForm.js';
+import React, {useReducer} from 'react';
+import { initialState, todoReducer } from './reducers/reducer';
+import { TodoForm }from './components/TodoForm';
+import { TodoList }  from './components/TodoList';
 
-function App() {
+function App(){
+  const [ state, dispatch ] = useReducer(todoReducer, initialState);
+  const addTodo = (input) => {
+    const newTodo = {
+      todo: input, 
+      completed: false, 
+      id: 1
+    }
+    dispatch({type: "ADD_TODO, payload: newTodo"})
+  }
+
+  const handleComplete = (id) => {
+    dispatch({type: "COMPLETED_TODO", payload: id})
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-       <TodoForm />
-      </header>
+    <div>
+      <TodoList state={state} handleComplete={handleComplete}/>
+      <TodoForm addTodo={addTodo} />
+      
     </div>
-  );
+  )
 }
 
 export default App;
-
-
 //=======================================================================================================//
 //  NOTES:                                                                                               //
 //  Predictability: do away with side-effects                                                            //

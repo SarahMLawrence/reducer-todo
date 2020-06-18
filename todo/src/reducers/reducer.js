@@ -4,9 +4,13 @@
 //  set up initialState  //
 //=======================//
 export const initialState = {
-  item: "Learn to play guitar",
-  completed: false,
-  id: Date.now
+  todoList: [
+    {
+      todo: '',
+      completed: false, 
+      id: Date.now
+    }
+  ]
 };
 
 //======================================================================//
@@ -16,7 +20,17 @@ export const initialState = {
 export const todoReducer = (state, action) => {
   switch (action.type) {
     case "ADD_TODO":
-      return state;
+      return [
+        ...state, 
+        action.payload
+      ]
+
+    case "COMPLETED_TODO":
+      return state.map((item) => {
+        return item.id === action.payload ?
+        {...item, completed: !item.completed} : 
+        item
+      })
 
     default:
       return state;

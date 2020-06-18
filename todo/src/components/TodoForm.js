@@ -1,15 +1,44 @@
-import React, { useState, useReducer } from "react";
-import { initialState, todoReducer } from "../reducers";
+//===========//
+//  IMPORTS  //
+//===========//
+import React, {useState} from "react";
 
-const TodoForm = () => {
-  return (
-    <div className="todo-form">
-      <div className="header">
-        <h2>SARAH'S TODO LIST</h2>
-        <input className="todo-input" type="text" name="newTodoItem" />
-        <button>Add To Todo</button>
-      </div>
-    </div>
-  );
-};
-export default TodoForm;
+
+export function TodoForm(props) {
+    const [newForm, setNewForm] = useState('');
+
+//   handleChanges = (e) => {
+//     //==================================//
+//     // update state with each keystroke //
+//     //==================================//
+//     this.setState({ [e.target.name]: e.target.value });
+//   };
+
+//   // class property to submit form
+// submitItem = e => {
+//     e.preventDefault();
+//     this.setState({ item: '' });
+//     this.props.addItem(e, this.state.item);
+// }
+//   render() {
+    return (
+      <form onSubmit={(event) => {
+          event.preventDefault()
+          props.addTodo(newForm)
+          setNewForm('')
+      }}>
+        <input
+          type="text"
+          value={newForm}
+          name="item"
+          placeholder="Add Todo Item"
+          onChange={(event) => {
+              setNewForm(event.target.value)
+          }}
+          autoComplete="off"
+        />
+        <button type='submit'> Add A New Todo</button>
+      </form>
+    );
+  }
+
