@@ -1,44 +1,43 @@
-//===========//
-//  IMPORTS  //
-//===========//
-import React, {useState} from "react";
+import React, { useReducer, useState } from "react";
 
+import { initialState, itemReducer } from "../reducers/index";
+import Todo from "../components/Todo";
 
-export function TodoForm(props) {
-    const [newForm, setNewForm] = useState('');
+const TodoForm = () => {
+  const [state, dispatch] = useReducer(itemReducer, initialState);
+  const [todo, setTodo] = useState("");
 
-//   handleChanges = (e) => {
-//     //==================================//
-//     // update state with each keystroke //
-//     //==================================//
-//     this.setState({ [e.target.name]: e.target.value });
-//   };
+  const handleChange = (e) => {
+    setTodo(e.target.value);
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch({ type: "ADD_TODO", payload: todo });
+  };
 
-//   // class property to submit form
-// submitItem = e => {
-//     e.preventDefault();
-//     this.setState({ item: '' });
-//     this.props.addItem(e, this.state.item);
-// }
-//   render() {
-    return (
-      <form onSubmit={(event) => {
-          event.preventDefault()
-          props.addTodo(newForm)
-          setNewForm('')
-      }}>
+  const handleRemove = (e) => {
+    e.preventDefault();
+    dispatch({ type: "TOGGLE_TODO", payload: todo });
+  };
+  return (
+    <div className="todo-form">
+      <form>
         <input
+          name="todo"
           type="text"
-          value={newForm}
-          name="item"
-          placeholder="Add Todo Item"
-          onChange={(event) => {
-              setNewForm(event.target.value)
-          }}
-          autoComplete="off"
-        />
-        <button type='submit'> Add A New Todo</button>
+          value={todo}
+          onChange={handleChange}
+        ></input>
+        <button className="addBTN" onClick={handleSubmit}>
+          ADD NEW ITEM TO LIST
+        </button>
+        <button className="clearBTN" onClick={handleRemove}>
+          Delete
+        </button>
       </form>
-    );
-  }
+      <Todo id={state.id} todo={todo} dispatch={dispatch} state={state} />
+    </div>
+  );
+};
 
+export default TodoForm;
