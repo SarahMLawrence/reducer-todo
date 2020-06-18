@@ -2,60 +2,64 @@
 //      STEP 1: initial State          //
 //*************************************//
 
-export const initialState = [
-  
+export const initialState = {
+  tasks: [
     {
+      id: 1,
       item: "Learn about the reducer pattern",
       completed: false,
-      id: Date.now(),
-      todoArray: [],
     },
-  ];
+    {
+      id: 2,
+      item: "Learn redux",
+      completed: false,
+    },
+  ],
+};
 
 //*************************************//
 //      STEP 2: reducer                //
 //*************************************//
 
 export const itemReducer = (state, action) => {
-  // switch (action.type) {
-  //   case "ADD_TODO":
-  //     return {
-  //       tasks: [...state.tasks, { itemList: action.itemList, completed: false }]
-  //     };
-  //   case "TOGGLE_TODO":
-  //     return {
-  //       tasks: state.tasks.map((item, id) =>
-  //         id === action.id ? { ...item, completed: !id.completed } : item
-  //       )
-  //     };
-
-  //   //   case "CLEAR_TODO":
-  //   // return todoList.filer((itemTodo) => itemTodo.completed);
-
-  //   default:
-  //     return state;
-  // }
-
   switch (action.type) {
     case "ADD_TODO":
-      const newTodoItem = {
+      const newTodo = {
+        id: Date.now(),
         item: action.payload,
         completed: false,
-        id: Date.now(),
       };
-      return [...state, newTodoItem]
+      return {
+        ...state,
+        tasks: [...state.tasks, newTodo],
+      };
 
     case "TOGGLE_COMPLETED":
-      return state.map(e =>
-        e.id === action.id ? { ...e, completed: !e.completed } : e
-      );
+      const updateTodo = state.tasks.map((todo) => {
+        if (todo.id === action.payload) {
+          return { ...todo, completed: !todo.completed };
+        } else {
+          return todo;
+        }
+      });
+      return {
+        ...state,
+        tasks: updateTodo,
+      }
 
-
-
-    case "TOGGLE_TODO":
-      return state.filter(e => !e.completed);
+      case "FILTER_TODO":
+        const incompleteTodo = state.tasks.filter(todo => {
+          if(todo.completed === false){
+            return {...todo}
+            
+          }
+        })
+        return {
+          ...state, 
+          tasks: incompleteTodo
+        }
 
     default:
       return state;
   }
-}
+};
